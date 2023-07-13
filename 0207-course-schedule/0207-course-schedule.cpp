@@ -1,51 +1,42 @@
 class Solution {
-public:
-    bool find(int course_num, 
-              const int numCourses, 
-              const vector<vector<int>>& prerequisites, 
-              unordered_map<int, vector<int>> &courses_with_prereqs,
-              unordered_set<int> visited) {
-        if (visited.find(course_num) != visited.end()) {
-            return false;
-        }
-        if (courses_with_prereqs.find(course_num) != courses_with_prereqs.end()) {
-            vector<int> prereqs = courses_with_prereqs[course_num];
-            visited.insert(course_num);
-            courses_with_prereqs.erase(course_num);
-            for (int prereq : prereqs) {
-                if (!find(prereq, numCourses, prerequisites, courses_with_prereqs, visited)) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        // else
-        return true;
-    }
-    
+public:  
     bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
-        // list of all courses you can't finish automatically and all their prereqs
-        // course_num : prereqs
-        unordered_map<int, vector<int>> courses_with_prereqs;
-        vector<int> courses;
+        // indegree list
+        vector<int> indegree(numCourses);
+        // adj list
+        unordered_map<int, vector<int>> adj;
         
-        // fill the map
-        for (vector<int> &p : prerequisites) {
-            if (courses_with_prereqs.find(p[0]) != courses_with_prereqs.end()) {
-                courses_with_prereqs[p[0]].push_back(p[1]);
+        for (const vector<int> &prereq : prerequisites) {
+            indegree[prereq[1]]++;
+            if (adj.find(prereq[0]) != adj.end()) {
+                adj[prereq[0]].push_back(prereq[1]);
             }
             else {
-                courses_with_prereqs[p[0]] = {p[1]};
-                courses.push_back(p[0]);
+                adj[prereq[0]] = {prereq[1]};
             }
         }
         
-        for (int course : courses) {
-            unordered_set<int> visited;
-            if (!find(course, numCourses, prerequisites, courses_with_prereqs, visited)) {
-                return false;
+        // bfs
+        int nodesVisited = 0;
+        queue<int> bfs;
+        for (int course = 0; course < numCourses; course++) {
+            if (indegree[course] == 0) {
+                bfs.push(course);
             }
         }
-        return true;
+        while (!bfs.empty()) {
+            int course = bfs.front();
+            bfs.pop();
+            nodesVisited++;
+            // subtract from indegree list
+            for (int prereq : adj[course]) {
+                indegree[prereq]--;
+                if (indegree[prereq] == 0) {
+                    bfs.push(prereq);
+                }
+            }
+        }
+        
+        return nodesVisited == numCourses;
     }
 };
