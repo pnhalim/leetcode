@@ -18,7 +18,7 @@ public:
                     // eliminate duplicates
                     while (0 < j && j < nums.size() && nums[j] == nums[j-1]) { j++; }
                     while (0 < k && k < nums.size() && nums[k] == nums[k+1]) { k--; }
-                    cout << i << j << k << endl;
+                    // cout << i << j << k << endl;
                 }
                 else if (sum < 0) {
                     j++;
