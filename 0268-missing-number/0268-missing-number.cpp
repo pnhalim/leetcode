@@ -1,14 +1,17 @@
 class Solution {
 public:
     int missingNumber(vector<int>& nums) {
-        // O(n) space O(n) runtime
-        unordered_set<int> nums_set(nums.begin(), nums.end());
+        
+        int target_sum = 0;
         for (int i = 0; i <= nums.size(); i++) {
-            if (nums_set.find(i) == nums_set.end()) {
-                return i;
-            }
+            target_sum += i;
         }
-        // error
-        return -1;
+        
+        int sum = 0;
+        for (int num : nums) {
+            sum += num;
+        }
+        
+        return target_sum - sum;
     }
 };
