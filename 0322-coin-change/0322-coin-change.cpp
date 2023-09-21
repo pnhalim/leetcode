@@ -2,30 +2,23 @@ class Solution {
 public:
     int coinChange(vector<int>& coins, int amount) {
         
-        unordered_set<int> prev;
-        prev.insert(amount);
+        vector<int> dp(amount+1, INT_MAX);
+        dp[0] = 0;
         
-        int count = 0;
-        unordered_set<int> next;
-        
-        while (!prev.empty() && prev.find(0) == prev.end()) {
-            for (int v : prev) {
+        for (int i = 0; i <= amount; i++) {
+            // fill dp with amounts st dp[amount] = min num coins
+            if (dp[i] != INT_MAX) {
                 for (int c : coins) {
-                    if (v-c >= 0 && prev.find(v-c) == prev.end()) {
-                        next.insert(v-c);
+                    if (c <= amount && i+c <= amount) {
+                        dp[i+c] = min(dp[i+c], dp[i] + 1);
                     }
                 }
             }
-            prev = next;
-            next.clear();
-            count++;
         }
         
-        if (prev.empty()) {
-            return -1;
-        }
-        
-        return count;
-        
+        if (dp[amount] != INT_MAX) {
+                return dp[amount];
+            }
+        return -1;
     }
 };
