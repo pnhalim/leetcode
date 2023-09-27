@@ -4,4 +4,4 @@ class Solution:
         d2 = datetime.date(year=int(date2[0:4]), month=int(date2[5:7]), day=int(date2[8:10]))
         if d1 == d2:
             return 0
-        return abs(int(str(d2 - d1).split()[0]))
+        return int(abs(d2 - d1).days)
