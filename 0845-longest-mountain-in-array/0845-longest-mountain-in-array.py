@@ -2,44 +2,32 @@ class Solution:
     def longestMountain(self, arr: List[int]) -> int:
         
         longest = 0
-        
-        start = 0
-        peak = 0
-        end = 0
-        
-        # find mountains
-        while end < len(arr) - 1:
+        start = peak = end = 0
+
+        while start < len(arr) - 1:
             
             # find start
-            while start < len(arr) - 1:
-                if arr[start] < arr[start + 1]:
-                    break
-                start += 1
-            peak = start
-            end = start
+            if arr[start] < arr[start + 1]:
+                # find peak
+                peak = start
+                while peak < len(arr) - 1 and arr[peak] < arr[peak + 1]:
+                    peak += 1
+                # not a valid tree
+                if peak == start:
+                    start = max(start + 1, peak)
+                    continue
 
-            # find peak
-            while peak < len(arr) - 1:
-                if arr[peak] > arr[peak + 1]:
-                    break
-                elif arr[peak] == arr[peak + 1]:
-                    start = peak
-                    end = peak
-                    break
-                peak += 1
-            if start == peak:
-                continue
-            end = peak
-            
-            # find end
-            while end < len(arr) - 1:
-                if (arr[end] < arr[end + 1] 
-                    or arr[end] == arr[end + 1]):
-                    break
-                end += 1
-            
-            if start != peak and peak != end:
+                # find end 
+                end = peak
+                while end < len(arr) - 1 and arr[end] > arr[end + 1]:
+                    end += 1
+                if peak == end:
+                    start = max(start + 1, end)
+                    continue
+
+                # record the length
                 longest = max(longest, end - start + 1)
-            start = end
+            
+            start = max(start + 1, end)
 
         return longest
