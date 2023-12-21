@@ -1,10 +1,10 @@
 class Solution:
     def findShortestSubArray(self, nums: List[int]) -> int:
         
-        degrees = {} # <num, degree>
-        locations = {} # <num, [start, end]>
+        degrees = {}     # <num, degree>
+        locations = {}  # <num, [start, end]>
         
-        # fill in degrees and locations
+        # fill degree and locations dicts
         for i, n in enumerate(nums):
             if n in degrees:
                 degrees[n] += 1
@@ -13,18 +13,19 @@ class Solution:
                 degrees[n] = 1
                 locations[n] = [i, i]
         
-        # find max degree and return the diff between start and end
-        max_degree = 0
-        max_nums = nums[0]
+        # find greatest degree
+        greatest_degree = 0
+        greatest_nums = []
         for n, d in degrees.items():
-            if d > max_degree:
-                max_degree = d
-                max_nums = [n]
-            elif d == max_degree:
-                max_nums.append(n)
+            if d > greatest_degree:
+                greatest_degree = d
+                greatest_nums = [n]
+            elif d == greatest_degree:
+                greatest_nums.append(n)
         
-        # find shortest length
-        shortest = 50000
-        for n in max_nums:
+        # find shortest end - start from locations
+        shortest = float('inf')
+        for n in greatest_nums:
             shortest = min(shortest, locations[n][1] - locations[n][0] + 1)
+        
         return shortest
