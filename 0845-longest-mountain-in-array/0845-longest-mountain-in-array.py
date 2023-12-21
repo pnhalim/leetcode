@@ -33,7 +33,6 @@ class Solution:
             
             # find end
             while end < len(arr) - 1:
-                print(start, peak, end)
                 if (arr[end] < arr[end + 1] 
                     or arr[end] == arr[end + 1]):
                     break
