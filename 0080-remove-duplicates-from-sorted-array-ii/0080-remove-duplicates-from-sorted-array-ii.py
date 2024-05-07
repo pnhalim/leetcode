@@ -4,7 +4,7 @@ class Solution:
         has_two = False
         for i in range(1, len(nums)):
             if nums[i] == nums[i-1]:
-                if not has_two:
+                if has_two == False:
                     tail += 1
                     has_two = True
             else:
