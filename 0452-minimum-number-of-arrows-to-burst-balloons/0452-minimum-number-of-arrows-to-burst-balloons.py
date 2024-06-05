@@ -5,16 +5,15 @@ class Solution:
         points.sort(key=lambda x: x[0])
         
         # go through the points array continuously 
-        interval = points[0]
+        interval = points[0][1]
         count = 1
         
         for i in range(1, len(points)):
-            if points[i][0] > interval[1]:
+            if points[i][0] > interval:
                 # point is outside the interval
-                interval = points[i]
+                interval = points[i][1]
                 count += 1
             else:
-                interval[0] = max(interval[0], points[i][0])
-                interval[1] = min(interval[1], points[i][1])
+                interval = min(interval, points[i][1])
 
         return count
